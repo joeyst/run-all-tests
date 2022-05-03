@@ -34,7 +34,7 @@ for file in $PWD/tests/* ; do
   echo "$file_ending"
 
   if [ "$file_ending" != "" ]; then
-    chmod 777 $PWD/tests${file_ending}.out
+    chmod 400 $PWD/tests${file_ending}.out
     actual_output=$(${command_to_run} < $PWD/tests${file_ending}.in)
     desired_output=$(head -100 $PWD/tests${file_ending}.out)
 
