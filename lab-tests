@@ -1,0 +1,64 @@
+#!/bin/bash
+pattern_for_lab_number='lab([0-9])\..*$'
+pattern_for_input='tests(.*)\.in$'
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NONE='\033[0m'
+BLUE='\033[0;34m'
+incorrect_outputs=()
+
+for file in $PWD/* ; do
+  [[ $file =~ $pattern_for_lab_number ]]
+  lab_number=${BASH_REMATCH[1]}
+  if [ "$lab_number" != "" ]; then
+    break
+  fi
+done
+
+if [ "$lab_number" == "3" ]; then
+  command_to_run='ruby lab3.rb'
+fi
+
+if [ "$lab_number" == "4" ]; then
+  command_to_run='racket lab4.rkt'
+fi
+
+if [ "$lab_number" == "5" ]; then
+  command_to_run='swipl lab5.pl'
+fi
+
+for file in $PWD/tests/* ; do
+  [[ $file =~ $pattern_for_input ]]
+  file_ending=${BASH_REMATCH[1]}
+  echo "$file_ending"
+
+  if [ "$file_ending" != "" ]; then
+    chmod 777 $PWD/tests${file_ending}.out
+    actual_output=$(${command_to_run} < $PWD/tests${file_ending}.in)
+    desired_output=$(head -100 $PWD/tests${file_ending}.out)
+
+    echo $actual_output
+    echo $desired_output
+
+    if [[ "$actual_output" == "$desired_output" ]]; then
+      echo "correct"
+    else
+      echo -e "${RED}INCORRECT${NONE}"
+      incorrect_outputs+="${file_ending}\n"
+      incorrect_outputs+="${GREEN}desired: $desired_output${NONE}\n"
+      incorrect_outputs+="${RED}actual: $actual_output${NONE}\n\n"
+      clear
+    fi
+  fi
+done
+
+clear
+echo -e "${BLUE}Incorrect Tests:${NONE}"
+for incorrect_output in "${incorrect_outputs}"
+do
+  printf "$incorrect_output"
+done
+if [ ${#incorrect_outputs[@]} -eq 0 ]; then
+  echo -e "${GREEN}All tests are passing${NONE}"
+fi
