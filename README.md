@@ -2,8 +2,11 @@
 Script for running CS381 lab tests in the terminal. Works for Lab 3, 4, and 5. 
 
 Runs with one of the following:
+- $ ./[script name]
 - $ source [script name] 
 - $ bash [script name]
+
+If you receive the "Access Denied" message, enter "chmod 700 [script name]" and run the script again.
 
 In order for it to work:
 - you must *run* it from the directory that your lab file is in
