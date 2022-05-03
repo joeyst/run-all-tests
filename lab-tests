@@ -17,6 +17,10 @@ for file in $PWD/* ; do
   fi
 done
 
+if [ "$lab_number" == "1" ] | [ "$lab_number" == "2" ]; then
+  command_to_run="rakudo lab${lab_number}.raku"
+fi
+
 if [ "$lab_number" == "3" ]; then
   command_to_run='ruby lab3.rb'
 fi
@@ -61,5 +65,11 @@ do
   printf "$incorrect_output"
 done
 if [ ${#incorrect_outputs[@]} -eq 0 ]; then
+  clear
   echo -e "${GREEN}All tests are passing${NONE}"
+fi
+
+if [ "$lab_number" == "" ]; then
+  clear
+  echo -e "${RED}Unable to find lab.${NONE}\nScript is supposed to be ran from your lab directory."
 fi
